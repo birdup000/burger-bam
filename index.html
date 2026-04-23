@@ -3,47 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burger Bam</title>
+    <title>Burger Bam - Serve the Burger!</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="game-container">
+        <!-- Header / HUD -->
         <header>
-            <h1>Burger Bam</h1>
+            <div class="branding">
+                <h1>🍔 Burger Bam</h1>
+            </div>
             <div id="score-board">
-                <span id="money">Money: $0</span>
-                <span id="rating">Rating: 0%</span>
+                <div class="score-item">
+                    <span class="label">Cash:</span>
+                    <span id="money">$0</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">Rating:</span>
+                    <span id="rating">0%</span>
+                </div>
             </div>
         </header>
 
         <main>
+            <!-- Customer Area -->
             <section id="customer-area">
-                <div id="customer-slot">
-                    <!-- Customer image/description will appear here -->
-                    <p>Waiting for customer...</p>
+                <div class="customer-card">
+                    <div id="customer-avatar" class="avatar">
+                        <!-- SVG Avatar will be injected here -->
+                        <svg viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" fill="#FFCCB0" />
+                            <circle cx="35" cy="40" r="5" fill="#333" />
+                            <circle cx="65" cy="40" r="5" fill="#333" />
+                            <path d="M 30 70 Q 50 85 70 70" stroke="#333" stroke-width="3" fill="none" />
+                        </svg>
+                    </div>
+                    <div id="order-bubble" class="order-bubble">
+                        <div id="order-list"></div>
+                    </div>
                 </div>
             </section>
 
+            <!-- Prep Area -->
             <section id="prep-area">
-                <div id="burger-stack">
-                    <!-- Ingredients will be stacked here -->
-                    <div class="plate"></div>
+                <div class="prep-counter">
+                    <!-- Burger Stack -->
+                    <div id="burger-stack-container">
+                        <div class="plate"></div>
+                        <div id="burger-stack"></div>
+                    </div>
+                    
+                    <!-- Controls -->
+                    <div class="controls">
+                        <button id="clear-btn" class="btn btn-danger">🗑️ Clear</button>
+                        <button id="serve-btn" class="btn btn-success">🛎️ Serve</button>
+                    </div>
                 </div>
-                <div id="actions">
-                    <button id="serve-btn">Serve</button>
-                    <button id="clear-btn">Clear</button>
-                </div>
-            </section>
 
-            <section id="ingredients-bar">
-                <h3>Ingredients</h3>
-                <div class="ingredient" data-name="bun-bottom" data-price="1">Bun Bottom</div>
-                <div class="ingredient" data-name="lettuce" data-price="2">Lettuce</div>
-                <div class="ingredient" data-name="tomato" data-price="2">Tomato</div>
-                <div class="ingredient" data-name="cheese" data-price="3">Cheese</div>
-                <div class="ingredient" data-name="patty" data-price="5">Patty</div>
-                <div class="ingredient" data-name="bacon" data-price="4">Bacon</div>
-                <div class="ingredient" data-name="bun-top" data-price="1">Bun Top</div>
+                <!-- Ingredient Station -->
+                <section id="ingredient-station">
+                    <h3>Ingredients Station</h3>
+                    <div id="ingredients-bar" class="ingredients-grid">
+                        <div class="ingredient" data-name="bun-bottom">
+                            <svg class="ing-icon" viewBox="0 0 100 60">
+                                <path d="M 10 30 Q 50 60 90 30" fill="#F4D03F" />
+                            </svg>
+                            <span>Bun Bottom</span>
+                        </div>
+                        <div class="ingredient" data-name="lettuce">
+                            <svg class="ing-icon" viewBox="0 0 100 60">
+                                <path d="M 10 20 Q 50 40 90 20 L 90 40 Q 50 60 10 40 Z" fill="#8BC34A" />
+                            </svg>
+                            <span>Lettuce</span>
+                        </div>
+                        <div class="ingredient" data-name="tomato">
+                            <svg class="ing-icon" viewBox="0 0 100 60">
+                                <rect x="10" y="20" width="80" height="20" rx="5" fill="#E53935" />
+                            </svg>
+                            <span>Tomato</span>
+                        </div>
+                        <div class="ingredient" data-name="cheese">
+                            <svg class="ing-icon" viewBox="0 0 100 60">
+                                <path d="M 5 25 L 100 25 L 90 35 L 10 35 Z" fill="#FFEB3B" />
+                                <path d="M 15 25 L 25 15 L 35 25 Z" fill="#FFEB3B" />
+                                <path d="M 65 25 L 75 15 L 85 25 Z" fill="#FFEB3B" />
+                            </svg>
+                            <span>Cheese</span>
+                        </div>
+                        <div class="ingredient" data-name="patty">
+                            <svg class="ing-icon" viewBox="0 0 100 60">
+                                <ellipse cx="50" cy="30" rx="45" ry="15" fill="#795548" />
+                            </svg>
+                            <span>Patty</span>
+                        </div>
+                        <div class="ingredient" data-name="bacon">
+                            <svg class="ing-icon" viewBox="0 0 100 60">
+                                <path d="M 10 25 Q 25 15 40 25 T 70 25 T 100 25 L 100 35 Q 85 25 70 35 T 40 35 T 10 35 Z" fill="#D84315" />
+                            </svg>
+                            <span>Bacon</span>
+                        </div>
+                        <div class="ingredient" data-name="bun-top">
+                            <svg class="ing-icon" viewBox="0 0 100 60">
+                                <path d="M 10 30 Q 50 -10 90 30 Z" fill="#F4D03F" />
+                            </svg>
+                            <span>Bun Top</span>
+                        </div>
+                    </div>
+                </section>
             </section>
         </main>
     </div>

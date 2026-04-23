@@ -1,27 +1,55 @@
 // Game State
 const state = {
     money: 0,
-    currentRating: 0,
+    rating: 0,
     currentCustomer: null,
     currentBurger: [],
     isServing: false
 };
 
-// Ingredient Definitions
+// Ingredient Definitions with SVG Graphics
 const ingredients = {
-    'bun-bottom': { name: 'Bun Bottom', color: '#f0d9a0', price: 1 },
-    'lettuce': { name: 'Lettuce', color: '#8bc34a', price: 2 },
-    'tomato': { name: 'Tomato', color: '#e53935', price: 2 },
-    'cheese': { name: 'Cheese', color: '#fdd835', price: 3 },
-    'patty': { name: 'Patty', color: '#795548', price: 5 },
-    'bacon': { name: 'Bacon', color: '#d84315', price: 4 },
-    'bun-top': { name: 'Bun Top', color: '#f0d9a0', price: 1 }
+    'bun-bottom': { 
+        name: 'Bun Bottom', 
+        price: 1, 
+        svg: `<svg viewBox="0 0 100 60" width="100%" height="100%"><path d="M 10 30 Q 50 60 90 30" fill="#F4D03F" stroke="#E67E22" stroke-width="2"/></svg>` 
+    },
+    'lettuce': { 
+        name: 'Lettuce', 
+        price: 2, 
+        svg: `<svg viewBox="0 0 100 60" width="100%" height="100%"><path d="M 10 20 Q 50 40 90 20 L 90 40 Q 50 60 10 40 Z" fill="#8BC34A" stroke="#558B2F" stroke-width="2"/></svg>` 
+    },
+    'tomato': { 
+        name: 'Tomato', 
+        price: 2, 
+        svg: `<svg viewBox="0 0 100 60" width="100%" height="100%"><rect x="10" y="20" width="80" height="20" rx="5" fill="#E53935" stroke="#B71C1C" stroke-width="2"/></svg>` 
+    },
+    'cheese': { 
+        name: 'Cheese', 
+        price: 3, 
+        svg: `<svg viewBox="0 0 100 60" width="100%" height="100%"><path d="M 5 25 L 100 25 L 90 35 L 10 35 Z" fill="#FFEB3B" stroke="#FBC02D" stroke-width="2"/><path d="M 15 25 L 25 15 L 35 25 Z" fill="#FFEB3B"/><path d="M 65 25 L 75 15 L 85 25 Z" fill="#FFEB3B"/></svg>` 
+    },
+    'patty': { 
+        name: 'Patty', 
+        price: 5, 
+        svg: `<svg viewBox="0 0 100 60" width="100%" height="100%"><ellipse cx="50" cy="30" rx="45" ry="15" fill="#795548" stroke="#3E2723" stroke-width="2"/></svg>` 
+    },
+    'bacon': { 
+        name: 'Bacon', 
+        price: 4, 
+        svg: `<svg viewBox="0 0 100 60" width="100%" height="100%"><path d="M 10 25 Q 25 15 40 25 T 70 25 T 100 25 L 100 35 Q 85 25 70 35 T 40 35 T 10 35 Z" fill="#D84315" stroke="#BF360C" stroke-width="2"/></svg>` 
+    },
+    'bun-top': { 
+        name: 'Bun Top', 
+        price: 1, 
+        svg: `<svg viewBox="0 0 100 60" width="100%" height="100%"><path d="M 10 30 Q 50 -10 90 30 Z" fill="#F4D03F" stroke="#E67E22" stroke-width="2"/></svg>` 
+    }
 };
 
 // DOM Elements
 const moneyEl = document.getElementById('money');
 const ratingEl = document.getElementById('rating');
-const customerSlotEl = document.getElementById('customer-slot');
+const orderListEl = document.getElementById('order-list');
 const burgerStackEl = document.getElementById('burger-stack');
 const serveBtn = document.getElementById('serve-btn');
 const clearBtn = document.getElementById('clear-btn');
@@ -29,161 +57,140 @@ const ingredientBtns = document.querySelectorAll('.ingredient');
 
 // Initialize Game
 function initGame() {
-    generateNewCustomer();
-    updateUI();
-}
-
-// Generate a new customer with a random order
-function generateNewCustomer() {
-    const ingredientKeys = Object.keys(ingredients);
-    // Ensure burger has bun bottom and top, and at least one patty
-    const order = ['bun-bottom', 'patty', 'bun-top'];
+    updateHUD();
+    generateCustomer();
     
-    // Randomly add optional ingredients
-    const optionalIngredients = ['lettuce', 'tomato', 'cheese', 'bacon'];
-    optionalIngredients.forEach(ing => {
-        if (Math.random() > 0.5) {
-            // Insert randomly between bun-bottom and bun-top
-            const insertIndex = Math.floor(Math.random() * (order.length - 1)) + 1;
-            order.splice(insertIndex, 0, ing);
-        }
+    ingredientBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const ingredientKey = btn.getAttribute('data-name');
+            addIngredient(ingredientKey);
+        });
     });
-    
-    // Shuffle the optional ingredients position relative to each other, but keep bun/patty fixed? 
-    // Papa's Pizzeria keeps the base structure. Let's just keep the order simple:
-    // Bun Bottom -> (Random Mix of others) -> Patty -> (Random Mix) -> Bun Top? 
-    // Actually, let's just make a random permutation of the selected ingredients excluding bun/patty first?
-    // No, standard burger is Bun, Toppings, Patty, Toppings, Bun? Or Bun, Patty, Toppings, Bun?
-    // Let's stick to a simple linear list generated above.
-    
-    state.currentCustomer = { order: order };
-    state.currentBurger = [];
-    
-    // Update Customer UI
-    renderCustomer();
-    renderBurger();
+
+    clearBtn.addEventListener('click', clearBurger);
+    serveBtn.addEventListener('click', serveBurger);
 }
 
-// Render Customer Order
-function renderCustomer() {
+// Generate a new Customer and Order
+function generateCustomer() {
+    const keys = Object.keys(ingredients);
+    const order = [];
+    
+    // Determine number of ingredients (3 to 6)
+    const numIngredients = Math.floor(Math.random() * 4) + 3;
+    
+    for (let i = 0; i < numIngredients; i++) {
+        const randomKey = keys[Math.floor(Math.random() * keys.length)];
+        order.push(randomKey);
+    }
+
+    state.currentCustomer = {
+        order: order
+    };
+
+    renderOrder();
+}
+
+// Render the Order Bubble
+function renderOrder() {
+    orderListEl.innerHTML = '';
     if (!state.currentCustomer) return;
+
+    state.currentCustomer.order.forEach(key => {
+        const item = document.createElement('div');
+        item.className = 'order-item';
+        item.textContent = ingredients[key].name;
+        orderListEl.appendChild(item);
+    });
+}
+
+// Add Ingredient to Burger
+function addIngredient(key) {
+    if (state.isServing) return;
     
-    const orderHTML = state.currentCustomer.order.map(ing => {
-        const name = ingredients[ing].name;
-        const price = ingredients[ing].price;
-        return `<div>${name} ($${price})</div>`;
-    }).join('');
+    state.currentBurger.push(key);
+    renderBurgerStack();
+}
+
+// Render the Burger Stack
+function renderBurgerStack() {
+    burgerStackEl.innerHTML = '';
     
-    customerSlotEl.innerHTML = `
-        <div id="customer-name">${getRandomName()}</div>
-        <div id="customer-order">${orderHTML}</div>
-    `;
+    state.currentBurger.forEach(key => {
+        const item = document.createElement('div');
+        item.className = 'stack-item';
+        item.innerHTML = ingredients[key].svg;
+        burgerStackEl.appendChild(item);
+    });
 }
 
-// Get a random name for the customer
-function getRandomName() {
-    const names = ['Alex', 'Jordan', 'Taylor', 'Morgan', 'Casey', 'Riley', 'Jamie', 'Quinn'];
-    return names[Math.floor(Math.random() * names.length)];
-}
-
-// Add ingredient to burger
-function addIngredient(ingredientKey) {
-    state.currentBurger.push(ingredientKey);
-    renderBurger();
-}
-
-// Clear the current burger
+// Clear Current Burger
 function clearBurger() {
     state.currentBurger = [];
-    renderBurger();
+    renderBurgerStack();
 }
 
-// Serve the burger
+// Serve Burger
 function serveBurger() {
-    if (state.currentBurger.length === 0) return;
-    
+    if (state.isServing) return;
+    state.isServing = true;
+
     const customerOrder = state.currentCustomer.order;
     const playerBurger = state.currentBurger;
+
+    // Calculate Score
+    let matches = 0;
+    const maxLen = Math.max(customerOrder.length, playerBurger.length);
     
-    let correct = true;
-    let reasons = [];
-    
-    // Check length
-    if (customerOrder.length !== playerBurger.length) {
-        correct = false;
-        reasons.push("Wrong number of ingredients.");
-    } else {
-        // Check each ingredient in order
-        for (let i = 0; i < customerOrder.length; i++) {
-            if (customerOrder[i] !== playerBurger[i]) {
-                correct = false;
-                reasons.push(`Wrong ingredient at position ${i + 1}.`);
-                break; // Just report first mismatch for simplicity
-            }
+    for (let i = 0; i < maxLen; i++) {
+        if (customerOrder[i] === playerBurger[i]) {
+            matches++;
         }
     }
     
-    // Calculate Rating
-    let rating = 0;
-    if (correct) {
-        rating = 100;
-    } else {
-        // Calculate partial credit? Let's say 50% for now if lengths match but wrong order/ing, else 0
-        if (customerOrder.length === playerBurger.length) {
-            rating = 50;
-        } else {
-            rating = 0;
-        }
-    }
+    const percentage = Math.round((matches / maxLen) * 100);
     
     // Calculate Money
-    // Base price of order
-    let orderTotal = customerOrder.reduce((sum, ing) => sum + ingredients[ing].price, 0);
+    const burgerCost = playerBurger.reduce((sum, key) => sum + ingredients[key].price, 0);
     let tip = 0;
-    if (rating === 100) tip = orderTotal * 0.2;
-    else if (rating === 50) tip = orderTotal * 0.1;
-    
-    const earned = orderTotal + tip;
-    
-    state.money += Math.floor(earned);
-    state.currentRating = rating;
-    
-    alert(`Rating: ${rating}%\nEarned: $${Math.floor(earned)}`);
-    
-    generateNewCustomer();
-    updateUI();
+    if (percentage === 100) tip = 10;
+    else if (percentage >= 80) tip = 5;
+    else if (percentage >= 50) tip = 2;
+
+    const totalEarned = burgerCost + tip;
+    state.money += totalEarned;
+    state.rating = percentage;
+
+    // Visual Feedback
+    const feedback = document.createElement('div');
+    feedback.style.position = 'fixed';
+    feedback.style.top = '50%';
+    feedback.style.left = '50%';
+    feedback.style.transform = 'translate(-50%, -50%)';
+    feedback.style.background = 'rgba(0,0,0,0.8)';
+    feedback.style.color = 'white';
+    feedback.style.padding = '20px 40px';
+    feedback.style.borderRadius = '10px';
+    feedback.style.fontSize = '24px';
+    feedback.style.fontFamily = 'Fredoka One, cursive';
+    feedback.style.zIndex = '1000';
+    feedback.textContent = `Served! +$${totalEarned} (${percentage}%)`;
+    document.body.appendChild(feedback);
+
+    setTimeout(() => {
+        document.body.removeChild(feedback);
+        state.isServing = false;
+        clearBurger();
+        generateCustomer();
+        updateHUD();
+    }, 1500);
 }
 
-// Update UI
-function updateUI() {
-    moneyEl.textContent = `Money: $${state.money}`;
-    ratingEl.textContent = `Rating: ${state.currentRating}%`;
+// Update HUD
+function updateHUD() {
+    moneyEl.textContent = `$${state.money}`;
+    ratingEl.textContent = `${state.rating}%`;
 }
-
-// Render Burger Stack
-function renderBurger() {
-    burgerStackEl.innerHTML = '<div class="plate"></div>'; // Keep plate at bottom
-    
-    state.currentBurger.forEach(ingKey => {
-        const ingData = ingredients[ingKey];
-        const div = document.createElement('div');
-        div.className = 'ingredient-piece';
-        div.style.backgroundColor = ingData.color;
-        div.textContent = ingData.name;
-        burgerStackEl.appendChild(div);
-    });
-}
-
-// Event Listeners
-ingredientBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const ingredientKey = btn.getAttribute('data-name');
-        addIngredient(ingredientKey);
-    });
-});
-
-clearBtn.addEventListener('click', clearBurger);
-serveBtn.addEventListener('click', serveBurger);
 
 // Start Game
 initGame();
