@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burger Bam</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <header>
+            <h1>Burger Bam</h1>
+            <div id="score-board">
+                <span id="money">Money: $0</span>
+                <span id="rating">Rating: 0%</span>
+            </div>
+        </header>
+
+        <main>
+            <section id="customer-area">
+                <div id="customer-slot">
+                    <!-- Customer image/description will appear here -->
+                    <p>Waiting for customer...</p>
+                </div>
+            </section>
+
+            <section id="prep-area">
+                <div id="burger-stack">
+                    <!-- Ingredients will be stacked here -->
+                    <div class="plate"></div>
+                </div>
+                <div id="actions">
+                    <button id="serve-btn">Serve</button>
+                    <button id="clear-btn">Clear</button>
+                </div>
+            </section>
+
+            <section id="ingredients-bar">
+                <h3>Ingredients</h3>
+                <div class="ingredient" data-name="bun-bottom" data-price="1">Bun Bottom</div>
+                <div class="ingredient" data-name="lettuce" data-price="2">Lettuce</div>
+                <div class="ingredient" data-name="tomato" data-price="2">Tomato</div>
+                <div class="ingredient" data-name="cheese" data-price="3">Cheese</div>
+                <div class="ingredient" data-name="patty" data-price="5">Patty</div>
+                <div class="ingredient" data-name="bacon" data-price="4">Bacon</div>
+                <div class="ingredient" data-name="bun-top" data-price="1">Bun Top</div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
