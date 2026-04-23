@@ -21,98 +21,105 @@
                 </div>
                 <div class="score-item">
                     <span class="label">Rating:</span>
-                    <span id="rating">0%</span>
+                    <span id="rating">50%</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">Day Timer:</span>
+                    <span id="day-timer">3:00</span>
                 </div>
             </div>
         </header>
 
         <main>
-            <!-- Customer Area -->
-            <section id="customer-area">
-                <div class="customer-card">
-                    <div id="customer-avatar" class="avatar">
-                        <!-- SVG Avatar will be injected here -->
-                        <svg viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="45" fill="#FFCCB0" />
-                            <circle cx="35" cy="40" r="5" fill="#333" />
-                            <circle cx="65" cy="40" r="5" fill="#333" />
-                            <path d="M 30 70 Q 50 85 70 70" stroke="#333" stroke-width="3" fill="none" />
-                        </svg>
-                    </div>
-                    <div id="order-bubble" class="order-bubble">
-                        <div id="order-list"></div>
-                    </div>
+            <!-- Customer Queue Area -->
+            <section id="queue-section">
+                <h2>Customers Waiting</h2>
+                <div id="customer-queue" class="queue-list">
+                    <!-- Queue items populated by JS -->
                 </div>
             </section>
 
-            <!-- Prep Area -->
-            <section id="prep-area">
-                <div class="prep-counter">
-                    <!-- Burger Stack -->
-                    <div id="burger-stack-container">
-                        <div class="plate"></div>
-                        <div id="burger-stack"></div>
+            <!-- Active Customer Area -->
+            <section id="active-section">
+                <div id="active-customer-area">
+                    <p>No customers waiting...</p>
+                </div>
+            </section>
+
+            <!-- Preparation & Cooking Area -->
+            <section id="prep-section">
+                <div id="grill-station">
+                    <h2>🔥 Grill Station</h2>
+                    <div class="grill-visual">
+                        <svg viewBox="0 0 100 100" width="100" height="100">
+                            <rect x="10" y="10" width="80" height="80" fill="#333" rx="10" />
+                            <rect x="20" y="20" width="60" height="60" fill="#444" rx="5" />
+                            <ellipse id="patty-visual" cx="50" cy="50" rx="25" ry="15" fill="#8D6E63" style="transition: fill 0.5s;" />
+                        </svg>
                     </div>
-                    
-                    <!-- Controls -->
-                    <div class="controls">
-                        <button id="clear-btn" class="btn btn-danger">🗑️ Clear</button>
-                        <button id="serve-btn" class="btn btn-success">🛎️ Serve</button>
+                    <div id="grill-controls">
+                        <button id="place-patty-btn">Place Patty</button>
+                        <button id="remove-patty-btn">Remove Patty</button>
                     </div>
+                    <p id="grill-status">Grill Idle</p>
                 </div>
 
-                <!-- Ingredient Station -->
-                <section id="ingredient-station">
-                    <h3>Ingredients Station</h3>
-                    <div id="ingredients-bar" class="ingredients-grid">
-                        <div class="ingredient" data-name="bun-bottom">
+                <div id="assembly-station">
+                    <h2>🥗 Assembly Station</h2>
+                    <div id="assembly-stack" class="burger-stack">
+                        <!-- Stacked items appear here -->
+                    </div>
+                    
+                    <div class="ingredient-bar">
+                        <div class="ingredient" data-name="lettuce" onclick="addIngredient('lettuce')">
                             <svg class="ing-icon" viewBox="0 0 100 60">
-                                <path d="M 10 30 Q 50 60 90 30" fill="#F4D03F" />
-                            </svg>
-                            <span>Bun Bottom</span>
-                        </div>
-                        <div class="ingredient" data-name="lettuce">
-                            <svg class="ing-icon" viewBox="0 0 100 60">
-                                <path d="M 10 20 Q 50 40 90 20 L 90 40 Q 50 60 10 40 Z" fill="#8BC34A" />
+                                <path d="M 10 20 Q 50 40 90 20 L 90 40 Q 50 60 10 40 Z" fill="#8BC34A" stroke="#558B2F" stroke-width="2"/>
                             </svg>
                             <span>Lettuce</span>
                         </div>
-                        <div class="ingredient" data-name="tomato">
+                        <div class="ingredient" data-name="tomato" onclick="addIngredient('tomato')">
                             <svg class="ing-icon" viewBox="0 0 100 60">
-                                <rect x="10" y="20" width="80" height="20" rx="5" fill="#E53935" />
+                                <rect x="10" y="20" width="80" height="20" rx="5" fill="#E53935" stroke="#B71C1C" stroke-width="2"/>
                             </svg>
                             <span>Tomato</span>
                         </div>
-                        <div class="ingredient" data-name="cheese">
+                        <div class="ingredient" data-name="cheese" onclick="addIngredient('cheese')">
                             <svg class="ing-icon" viewBox="0 0 100 60">
-                                <path d="M 5 25 L 100 25 L 90 35 L 10 35 Z" fill="#FFEB3B" />
-                                <path d="M 15 25 L 25 15 L 35 25 Z" fill="#FFEB3B" />
-                                <path d="M 65 25 L 75 15 L 85 25 Z" fill="#FFEB3B" />
+                                <path d="M 5 25 L 100 25 L 90 35 L 10 35 Z" fill="#FFEB3B" stroke="#FBC02D" stroke-width="2"/>
+                                <path d="M 15 25 L 25 15 L 35 25 Z" fill="#FFEB3B"/>
+                                <path d="M 65 25 L 75 15 L 85 25 Z" fill="#FFEB3B"/>
                             </svg>
                             <span>Cheese</span>
                         </div>
-                        <div class="ingredient" data-name="patty">
+                        <div class="ingredient" data-name="bacon" onclick="addIngredient('bacon')">
                             <svg class="ing-icon" viewBox="0 0 100 60">
-                                <ellipse cx="50" cy="30" rx="45" ry="15" fill="#795548" />
-                            </svg>
-                            <span>Patty</span>
-                        </div>
-                        <div class="ingredient" data-name="bacon">
-                            <svg class="ing-icon" viewBox="0 0 100 60">
-                                <path d="M 10 25 Q 25 15 40 25 T 70 25 T 100 25 L 100 35 Q 85 25 70 35 T 40 35 T 10 35 Z" fill="#D84315" />
+                                <path d="M 10 20 Q 30 10 50 20 T 90 20 L 90 30 Q 70 40 50 30 T 10 30 Z" fill="#D32F2F" stroke="#B71C1C" stroke-width="2"/>
                             </svg>
                             <span>Bacon</span>
                         </div>
-                        <div class="ingredient" data-name="bun-top">
-                            <svg class="ing-icon" viewBox="0 0 100 60">
-                                <path d="M 10 30 Q 50 -10 90 30 Z" fill="#F4D03F" />
-                            </svg>
-                            <span>Bun Top</span>
-                        </div>
                     </div>
-                </section>
+
+                    <div class="action-buttons">
+                        <button id="clear-btn">Clear Station</button>
+                        <button id="serve-btn">Serve Order</button>
+                    </div>
+                </div>
             </section>
         </main>
+
+        <!-- Serve Feedback Overlay -->
+        <div id="serve-feedback" class="feedback"></div>
+
+        <!-- Day End Overlay -->
+        <div id="day-end-overlay" class="overlay">
+            <div class="overlay-content">
+                <h2>Day Complete!</h2>
+                <p>Cash Earned: <span id="final-money">$0</span></p>
+                <p>Rating: <span id="final-rating">0%</span></p>
+                <p>Customers Served: <span id="final-served">0</span></p>
+                <button id="reset-day-btn">Start Next Day</button>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>

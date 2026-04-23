@@ -11,290 +11,329 @@ body {
 
 #game-container {
     width: 100%;
-    max-width: 900px;
+    max-width: 1000px;
     background-color: #ecf0f1;
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative;
 }
 
 /* Header */
 header {
     background: linear-gradient(135deg, #ff6b6b, #ee5253);
     color: white;
-    padding: 15px 20px;
+    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-header h1 {
+.branding h1 {
     margin: 0;
     font-family: 'Fredoka One', cursive;
-    font-size: 24px;
-    letter-spacing: 1px;
+    font-size: 1.5rem;
 }
 
 #score-board {
     display: flex;
     gap: 20px;
-    font-weight: bold;
-    font-size: 18px;
 }
 
 .score-item {
     background: rgba(255,255,255,0.2);
-    padding: 5px 15px;
-    border-radius: 20px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.score-item .label {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.score-item span:last-child {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem;
 }
 
 /* Main Layout */
 main {
-    flex: 1;
     display: flex;
+    flex: 1;
     flex-direction: column;
-    padding: 20px;
-    gap: 20px;
+    overflow-y: auto;
 }
 
-/* Customer Area */
-#customer-area {
+/* Queue Section */
+#queue-section {
+    background-color: #34495e;
+    padding: 10px;
+    border-bottom: 4px solid #2c3e50;
+}
+
+#queue-section h2 {
+    color: white;
+    margin: 0 0 10px 0;
+    font-size: 1rem;
+    font-family: 'Fredoka One', cursive;
+    text-align: center;
+}
+
+.queue-list {
     display: flex;
     justify-content: center;
-    min-height: 180px;
+    gap: 10px;
+    min-height: 60px;
 }
 
-.customer-card {
+.queue-customer {
+    background: #ecf0f1;
+    border-radius: 8px;
+    padding: 5px;
+    text-align: center;
+    width: 80px;
+    border: 2px solid #bdc3c7;
+}
+
+.customer-avatar {
+    font-size: 24px;
+    margin-bottom: 2px;
+}
+
+.customer-name {
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.customer-patience-mini {
+    height: 4px;
+    background-color: #8BC34A;
+    border-radius: 2px;
+    transition: width 0.2s;
+}
+
+/* Active Customer Area */
+#active-section {
+    background: #dfe6e9;
+    padding: 20px;
     display: flex;
-    gap: 20px;
-    align-items: flex-start;
+    justify-content: center;
+    border-bottom: 4px solid #b2bec3;
+}
+
+.active-customer {
     background: white;
     padding: 15px;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 600px;
-}
-
-.avatar {
-    width: 80px;
-    height: 80px;
-    background: #ffeaa7;
-    border-radius: 50%;
-    border: 3px solid #fdcb6e;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+    min-width: 250px;
 }
 
-.avatar svg {
-    width: 60px;
-    height: 60px;
+.active-customer .customer-avatar.large {
+    font-size: 40px;
+}
+
+.active-customer .customer-name.large {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 5px 0;
+    color: #2c3e50;
 }
 
 .order-bubble {
-    flex: 1;
-    background: #fff;
-    border: 2px solid #333;
+    background: #3498db;
+    color: white;
+    padding: 10px;
     border-radius: 10px;
-    padding: 15px;
+    margin: 10px 0;
     position: relative;
-    box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
-}
-
-.order-bubble::before {
-    content: '';
-    position: absolute;
-    left: -10px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-width: 10px 10px 10px 0;
-    border-color: transparent #333 transparent transparent;
+    width: 100%;
+    text-align: left;
 }
 
 .order-bubble::after {
     content: '';
     position: absolute;
-    left: -7px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-width: 8px 8px 8px 0;
-    border-color: transparent #fff transparent transparent;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #3498db;
 }
 
-#order-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    align-items: center;
+.order-bubble h3 {
+    margin: 0 0 5px 0;
+    font-size: 0.9rem;
+    text-align: center;
 }
 
-.order-item {
-    display: inline-block;
-    background: #f1c40f;
-    border: 1px solid #d35400;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
-    text-transform: capitalize;
+.order-bubble ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
 }
 
-/* Prep Area */
-#prep-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.order-bubble li {
+    margin: 2px 0;
+    font-size: 0.9rem;
 }
 
-.prep-counter {
-    display: flex;
-    gap: 20px;
-    height: 300px;
-}
-
-#burger-stack-container {
-    flex: 1;
-    background: #fff;
-    border-radius: 10px;
-    border: 2px dashed #bdc3c7;
-    position: relative;
-    display: flex;
-    flex-direction: column-reverse; /* Stack from bottom up */
-    align-items: center;
-    justify-content: flex-start;
-    padding: 10px;
-    overflow-y: auto;
-}
-
-.plate {
-    width: 120px;
-    height: 20px;
-    background: #bdc3c7;
-    border-radius: 50%;
-    margin-top: auto;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    position: absolute;
-    bottom: 10px;
-    z-index: 0;
-}
-
-#burger-stack {
+.patience-container {
     width: 100%;
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
-    padding-bottom: 30px; /* Space above plate */
-    z-index: 1;
-    pointer-events: none; /* Let clicks pass through if needed */
-}
-
-/* Ingredient Items in Stack */
-.stack-item {
-    width: 140px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: -5px; /* Overlap slightly */
-    position: relative;
-    z-index: 1;
-    transition: transform 0.2s;
-}
-
-.stack-item svg {
-    width: 100%;
-    height: 100%;
-    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
-}
-
-/* Controls */
-.controls {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
     margin-top: 10px;
 }
 
-.btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 25px;
-    font-family: 'Fredoka One', cursive;
-    font-size: 16px;
-    cursor: pointer;
-    transition: transform 0.1s, box-shadow 0.1s;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+.patience-bar-bg {
+    width: 100%;
+    height: 10px;
+    background: #bdc3c7;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
-.btn:active {
-    transform: translateY(4px);
-    box-shadow: 0 0 0 rgba(0,0,0,0.2);
+.patience-bar {
+    height: 100%;
+    background: #8BC34A;
+    transition: width 0.5s, background-color 0.5s;
 }
 
-.btn-danger {
-    background-color: #e74c3c;
-    color: white;
-}
-
-.btn-success {
-    background-color: #2ecc71;
-    color: white;
-}
-
-/* Ingredient Station */
-#ingredient-station {
-    background: #fff;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-}
-
-#ingredient-station h3 {
-    margin: 0 0 10px 0;
-    text-align: center;
+#patience-text {
+    font-size: 0.8rem;
+    font-weight: bold;
     color: #7f8c8d;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 14px;
+    display: block;
+    text-align: right;
+    margin-top: 2px;
 }
 
-.ingredients-grid {
+/* Prep Section (Grill + Assembly) */
+#prep-section {
     display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    flex: 1;
+    padding: 20px;
+    gap: 20px;
 }
 
-.ingredient {
-    width: 80px;
-    height: 80px;
-    background: #f8f9fa;
-    border: 2px solid #ecf0f1;
+#grill-station {
+    flex: 1;
+    background: #2c3e50;
     border-radius: 10px;
+    padding: 15px;
+    color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
+}
+
+#grill-station h2 {
+    font-family: 'Fredoka One', cursive;
+    margin-top: 0;
+    font-size: 1.2rem;
+}
+
+.grill-visual {
+    margin: 15px 0;
+}
+
+#grill-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+#grill-status {
+    font-size: 0.9rem;
+    font-weight: bold;
+    min-height: 1.2em;
+}
+
+#assembly-station {
+    flex: 1;
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #ecf0f1;
+}
+
+#assembly-station h2 {
+    font-family: 'Fredoka One', cursive;
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: #2c3e50;
+}
+
+.burger-stack {
+    height: 150px;
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse; /* Stack from bottom */
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px dashed #bdc3c7;
+}
+
+.stack-item {
+    width: 80%;
+    max-width: 100px;
+    height: 30px;
+    display: flex;
     justify-content: center;
+    align-items: center;
+    margin: -5px 0; /* Overlap slightly */
+    position: relative;
+}
+
+.stack-item.patty {
+    height: 20px;
+    z-index: 1;
+}
+
+.ingredient-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.ingredient {
+    background: #f1f2f6;
+    border: 1px solid #ced6e0;
+    border-radius: 8px;
+    padding: 10px;
     cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.1s, background 0.2s;
 }
 
 .ingredient:hover {
-    background: #fff;
-    border-color: #3498db;
+    background: #e2e6ea;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .ingredient:active {
     transform: translateY(0);
-    box-shadow: none;
 }
 
 .ing-icon {
@@ -304,8 +343,162 @@ main {
 }
 
 .ingredient span {
-    font-size: 10px;
+    font-size: 0.7rem;
     font-weight: bold;
     text-transform: uppercase;
     color: #555;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.action-buttons button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-family: 'Fredoka One', cursive;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#clear-btn {
+    background: #95a5a6;
+    color: white;
+}
+
+#clear-btn:hover {
+    background: #7f8c8d;
+}
+
+#serve-btn {
+    background: #27ae60;
+    color: white;
+}
+
+#serve-btn:hover {
+    background: #2ecc71;
+}
+
+#place-patty-btn {
+    background: #e67e22;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-family: 'Fredoka One', cursive;
+    cursor: pointer;
+}
+
+#place-patty-btn:hover {
+    background: #f39c12;
+}
+
+#remove-patty-btn {
+    background: #c0392b;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-family: 'Fredoka One', cursive;
+    cursor: pointer;
+}
+
+#remove-patty-btn:hover {
+    background: #e74c3c;
+}
+
+/* Feedback Overlay */
+.feedback {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    display: none;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.feedback.success {
+    background: #27ae60;
+}
+
+.feedback.fail {
+    background: #e74c3c;
+}
+
+/* Day End Overlay */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+}
+
+.overlay-content {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.overlay-content h2 {
+    font-family: 'Fredoka One', cursive;
+    color: #2c3e50;
+    margin-top: 0;
+}
+
+.overlay-content p {
+    font-size: 1.2rem;
+    margin: 10px 0;
+}
+
+#reset-day-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#reset-day-btn:hover {
+    background: #2980b9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #prep-section {
+        flex-direction: column;
+    }
+    
+    #score-board {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .queue-list {
+        flex-wrap: wrap;
+    }
 }
